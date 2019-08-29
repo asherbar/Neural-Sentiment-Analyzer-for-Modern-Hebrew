@@ -78,7 +78,7 @@ class Predictor:
 
 
 def main():
-    predictor = Predictor(train_data_path='data/description_2.tsv')
+    predictor = Predictor(train_data_path='data/all_training_data.tsv')
     predictor.train()
     scores = predictor.evaluate('data/headline_1.tsv')
     print('\nAccuracy: {:.3f}'.format(scores[1]))
