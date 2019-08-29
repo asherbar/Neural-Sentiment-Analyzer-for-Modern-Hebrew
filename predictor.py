@@ -24,7 +24,7 @@ class Predictor:
         self.pickle_path = os.path.splitext(train_data_path)[0] + '.model.p'
         self._tokenizer = text.Tokenizer(num_words=vocabulary_size, char_level=False, filters='')
 
-        raw_x, raw_y = self._raw_data_from_tsv(self.train_data_path)
+        raw_x, raw_y = self._aggregate_raw_data_from_dir(self.train_data_path)
         self._tokenizer.fit_on_texts(raw_x)
 
         self.x_train, self.y_train = self._prepare_from_raw_data(raw_x, raw_y)
@@ -37,6 +37,19 @@ class Predictor:
     def evaluate(self, test_data_path='data/token_test.tsv'):
         x_token_test, y_token_test = self._prepare_test_data(test_data_path)
         return self.model.evaluate(x_token_test, y_token_test, batch_size=self.batch_size, verbose=1)
+
+    @classmethod
+    def _aggregate_raw_data_from_dir(cls, dir_path):
+        raw_x, raw_y = [], []
+        for filename in os.listdir(dir_path):
+            if filename.lower().endswith(".tsv"):
+                print(f'Adding training data from {filename}')
+                tsv_path = os.path.join(dir_path, filename)
+                file_raw_x, file_raw_y = cls._raw_data_from_tsv(tsv_path)
+                raw_x.extend(file_raw_x)
+                raw_y.extend(file_raw_y)
+        print(f'Training data length: {len(raw_x)}')
+        return raw_x, raw_y
 
     @classmethod
     def _raw_data_from_tsv(cls, tsv_path):
@@ -78,7 +91,7 @@ class Predictor:
 
 
 def main():
-    predictor = Predictor(train_data_path='data/all_training_data.tsv')
+    predictor = Predictor(train_data_path='data/training')
     predictor.train()
     scores = predictor.evaluate('data/headline_1.tsv')
     print('\nAccuracy: {:.3f}'.format(scores[1]))
