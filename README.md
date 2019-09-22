@@ -1,3 +1,20 @@
+# NLP project, Open University of Israel, Spring 2019
+
+## Prerequisites
+1. Python 3.7
+1. All packages mentioned in [requirements.txt](requirements.txt)
+
+## Aspect Extraction
+See the notebooks in [Aspect_Extraction](Aspect_Extraction)
+
+## Sentiment Analyser
+* Data is in the [data](data) directory
+* The predictor itself can be run by executing [predictor.py](predictor.py)
+
+---
+Following is the README of the forked repository
+---
+
 # Neural Sentiment Analyzer for Modern Hebrew
 
 
